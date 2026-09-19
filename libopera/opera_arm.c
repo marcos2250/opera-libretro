@@ -2091,3 +2091,7 @@ opera_io_write(uint32_t const addr_,
 uint32_t opera_arm_get_pc() {
   return CPU.USER[15];
 }
+
+uint32_t opera_arm_get_register(int number) {
+  return CPU.USER[number]; 
+}

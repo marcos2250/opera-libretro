@@ -10,3 +10,7 @@
 /test-harness
 /test-harness-runs/
 .vscode/pro-deployer.json
+*.bin
+*.ini
+imgui-debugger
+debugger_config.txt

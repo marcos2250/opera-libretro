@@ -54,6 +54,7 @@ void     opera_arm_swi_hle_set(const int hle);
 int      opera_arm_swi_hle_get(void);
 
 uint32_t opera_arm_get_pc(void);
+uint32_t opera_arm_get_register(int number);
 
 EXTERN_C_END
 

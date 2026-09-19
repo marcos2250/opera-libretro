@@ -64,6 +64,8 @@ retro_game_info g_game_info;
 uint32_t g_code = 0;
 char g_disasm_txt[60];
 char g_input_address[10];
+char g_input_breakpoint[10];
+int g_input_breakpoint_value = 0;
 uint32_t g_curr_pc = 0;
 bool g_debug_follow_pc = 0;
 uint32_t g_bp_address[10];
@@ -673,12 +675,18 @@ void gui_process() {
 			ImGui::Text("Running...");
 		} else {
 			ImGui::Text("Stopped at: %x", pc + mem_offset[mem_option]);
+
+			ImGui::Text("Registers: 0:%08x 1:%08x 2:%08x 3:%08x", 
+				opera_arm_get_register(0),
+				opera_arm_get_register(1),
+				opera_arm_get_register(2),
+				opera_arm_get_register(3));
 		}
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		const float heightSeparator = style.ItemSpacing.y;
 		float footerHeight = 0;
-		footerHeight += heightSeparator * 2 + ImGui::GetTextLineHeightWithSpacing();
+		footerHeight += heightSeparator * 8 + ImGui::GetTextLineHeightWithSpacing();
 		
 		ImGui::BeginChild("##ScrollingRegion", ImVec2(0, -footerHeight), true, ImGuiWindowFlags_HorizontalScrollbar);
 
@@ -734,7 +742,7 @@ void gui_process() {
 			}
 		}
 	    ImGui::EndChild();
-
+		
 		ImGui::Text("Address:");
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(100);
@@ -745,7 +753,26 @@ void gui_process() {
             }
         }
 		ImGui::SameLine();
+		ImGui::SetNextItemWidth(200);
 		ImGui::Combo("##memblock", &mem_option, mem_name, IM_ARRAYSIZE(mem_name));
+
+		ImGui::Text("Insert BP:");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(100);
+        if (ImGui::InputText("##bpinput", g_input_breakpoint, IM_ARRAYSIZE(g_input_breakpoint), ImGuiInputTextFlags_CharsHexadecimal)) {
+            int bp_value;
+			if (sscanf(g_input_breakpoint, "%8lX", &bp_value) == 1) {
+ 				g_input_breakpoint_value = bp_value;
+			}
+        }
+		ImGui::SameLine();
+		if (ImGui::Button("Add Addr BP")) { 
+			dbg_toggleBreakpoint(0, g_input_breakpoint_value);
+		}		
+		ImGui::SameLine();
+		if (ImGui::Button("Add Instr BP")) { 
+			dbg_toggleBreakpoint(1, g_input_breakpoint_value);
+		}		
 
         ImGui::End();	
 	}

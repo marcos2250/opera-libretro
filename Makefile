@@ -677,16 +677,18 @@ print-%:
 IMGUI_TARGET := imgui-debugger
 
 imgui-flags:
-   CFLAGS += -D__IMGUI_DEBUGGER__ -O0 -g3 -Wall -Wextra -I/usr/include/SDL2 -include/usr/include/SDL2/SDL.h -I./deps/imgui -I./libopera $(INCFLAGS)
-   IMGUI_LDFLAGS := -ldl -lstdc++ -lm -lSDL2 -lSDL2main -lGL -lGLU -L/usr/include/SDL2 -L/usr/include/GL -L/home/m3/Projetos/opera-libretro/libopera
+   CFLAGS += -D__IMGUI_DEBUGGER__ -O0 -g3 -Wall -Wextra -I/usr/include/SDL2 -include/usr/include/SDL2/SDL.h \
+   	-I./deps/imgui/backends -I./deps/imgui/misc/cpp -I./deps/imgui -I./deps/imgui_club/imgui_memory_editor/ \
+   	$(INCFLAGS)
+   IMGUI_LDFLAGS := -ldl -lstdc++ -lm -lSDL2 -lSDL2main -lGL -lGLU -L/usr/include/SDL2 -L/usr/include/GL -L./libopera
 
    IMGUI_SRC := \
-	$(DEPS_DIR)/imgui/imgui_stdlib.cpp \
+	$(DEPS_DIR)/imgui/misc/cpp/imgui_stdlib.cpp \
 	$(DEPS_DIR)/imgui/imgui_tables.cpp \
 	$(DEPS_DIR)/imgui/imgui_draw.cpp \
 	$(DEPS_DIR)/imgui/imgui_widgets.cpp \
-	$(DEPS_DIR)/imgui/imgui_impl_sdl2.cpp \
-	$(DEPS_DIR)/imgui/imgui_impl_opengl2.cpp \
+	$(DEPS_DIR)/imgui/backends/imgui_impl_sdl2.cpp \
+	$(DEPS_DIR)/imgui/backends/imgui_impl_opengl2.cpp \
 	$(DEPS_DIR)/imgui/imgui.cpp \
 	./tools/imgui_debug_main.cpp
 
